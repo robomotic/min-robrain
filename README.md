@@ -253,7 +253,7 @@ If the budget allows, upgrading from open-loop MG90S servos to **closed-loop ser
 | IMU | GY-521 MPU6050 6-Axis Accelerometer/Gyroscope | [Amazon UK](https://www.amazon.co.uk/Aokin-MPU-6050-Accelerometer-Gyroscope-Converter/dp/B07PSCB75V) |
 | Foot Sensors | 4x FSR (Force Sensitive Resistor) Sensors | - |
 | Display | 0.96" I2C OLED Display Module | [The Pi Hut](https://thepihut.com/products/0-96inch-oled-display-module-128x94?srsltid=AfmBOoqp-t6EtKOAbMK_AmFE9vgYUqKxAWEiF5hYnIa922I6ifoR53_q) |
-| Power Regulation | **Adjustable**: Hobbywing UBEC 10A (2-6S) set to 5.0V via dip switches.<br>**Fixed (Non-adjustable)**: 5.0V/10A dedicated output.<br>*(Input: XT30, Output: Direct Solder or JST-SM)* | [Adjustable](https://www.hobbywing.com/en/products/ubec-10a-2-6s152) / [Fixed](https://www.aliexpress.com/item/1005009420262174.html) |
+| Power Regulation | **Recommended (12 Servos)**: Hobbywing UBEC 10A (2-6S) set to 5.0V.<br>**Compact Example**: Hobbywing UBEC 5A 2-8S V2 Air *(⚠️ Warning: 5A continuous is only safe for ~6-8 MG90S servos. Do not use for the full 12-servo build to avoid thermal shutdown)*.<br>**Fixed**: 5.0V/10A dedicated output.<br>*(Input: XT30, Output: Direct Solder or JST-SM)* | [10A Adjustable](https://www.hobbywing.com/en/products/ubec-10a-2-6s152) / [5A Air Example](https://wheelspinmodels.co.uk/i/hobbywing-ubec-5a-28s-v2-air-339470) / [Fixed 10A](https://www.aliexpress.com/item/1005009420262174.html) |
 | Battery Monitor | INA219 I2C High-Side Voltage/Current Sensor Module (shares I2C bus, 0 extra GPIO) | - |
 | Battery Charger | Low-cost 2S LiPo Smart Charger (e.g., ISDT 608AC) with XT30 output cable | - |
 | Battery | 2S LiPo Battery (500mAh–1000mAh) with XT30 connector | - |
