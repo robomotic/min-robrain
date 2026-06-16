@@ -1,6 +1,8 @@
-# Waveshare ESP32-S3 Options for TFLite/RL Robotics
+# Ideal Dev Kit for Physical Robotics on Low-Cost Servos
 
-Waveshare provides ultra-compact microcontroller alternatives that meet strict pin requirements while exposing nearly all pins for easy access. Two standout options from their catalog are ideal for Tiny Machine Learning (TFLite) and Reinforcement Learning (RL) robotics builds.
+This document compiles key lessons learned from experimenting with hardware architectures and deploying Reinforcement Learning (RL) policies on physical robots. Building a robust, low-cost legged robot requires balancing strict pin requirements, power delivery limits, and microsecond-level control loop determinism. 
+
+The Waveshare ESP32-S3 variants provide the ultra-compact footprint and computational headroom (via ample PSRAM) necessary to execute TFLite models while directly driving low-cost actuators without relying on bottlenecked external drivers.
 
 ## 1. Waveshare ESP32-S3-Zero (N8R8 Variant)
 
