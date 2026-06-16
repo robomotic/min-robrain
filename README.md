@@ -62,6 +62,17 @@ While the **PCA9685 16-Channel PWM Driver** ([AliExpress](https://www.aliexpress
 * **Arduino**: Use the `ESP32Servo` library.
 * **MicroPython**: Use the native `machine.PWM` module.
 
+## The Importance of a Dedicated Servo Breakout Board
+
+When directly driving 12 servos from an ESP32-S3, managing the physical wiring is just as critical as the software. Soldering 12 signal wires and their corresponding grounds directly to a microcontroller is prone to cold joints, short circuits, and mechanical failure under vibration. 
+
+**Recommended Component: Serial Wombat Servo Breakout Board** ([Amazon UK](https://www.amazon.co.uk/Servo-Breakout-Board-Serial-Wombat/dp/B0F835FT7X))
+
+This board is explicitly designed to solve the "rats nest" wiring problem in multi-servo robotics:
+* **Organized Signal Distribution**: It provides clean, numbered, screw-terminal or header-based breakout points for all 12 servo signal lines, keeping the ESP32-S3's GPIO pins organized and easily traceable.
+* **Robust Power Routing**: It allows the main high-current 5V rail from the UBEC to be securely distributed to all servos without overloading the microcontroller's pins or relying on fragile jumper wires.
+* **Maintenance & Debugging**: If a single servo fails or needs replacement, it can be disconnected and swapped in seconds without desoldering or disrupting the rest of the robot's wiring harness.
+
 ## Power Requirements & Current Calculation (12x MG90S Servos at 5.0V)
 
 To ensure stable operation without voltage sag or triggering the BEC's over-current protection, the following current profile must be supported:
