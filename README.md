@@ -241,6 +241,30 @@ If the budget allows, upgrading from open-loop MG90S servos to **closed-loop ser
   3. **Simplified Debugging**: The DFRobot board includes a USB interface, allowing you to easily configure servo IDs, set angle limits, and test movements from a PC before deploying the code to the ESP32-S3.
 * **Integration**: The ESP32-S3 connects to the DFRobot board via UART. The DFRobot board handles the heavy lifting of packet routing and power distribution to the daisy-chained STS3215 servos.
 
+## RL Training & Quantization Strategy (mjlab)
+
+Forking a framework like `mjlab` to support native INT8 training is a **massive undertaking** that is mathematically and practically discouraged for reinforcement learning. It is not simply a matter of "supporting TFLite" in the code; it is a fundamental problem of how gradient-based optimization works.
+
+### Why Native INT8 Training is Extremely Complex
+Training requires high-precision math (FP32 or higher) to calculate the "nudge" (gradient) needed to improve the model. INT8 arithmetic is designed for the *final inference* stage, not the learning process.
+* **The Vanishing Gradient Problem:** During training, gradients are often microscopic. In INT8, these values are frequently rounded down to zero, meaning the model stops "learning" because it can't detect the small changes needed to improve.
+* **The Range Problem:** INT8 uses a fixed-scale "ruler." Deep learning requires capturing both tiny weight updates and large activation spikes. INT8 cannot "zoom in" on the small numbers and "zoom out" on the large numbers simultaneously, leading to catastrophic saturation.
+* **Optimizer Instability:** Algorithms like Adam or SGD maintain "moving averages" of gradients. If these are quantized to integers, the noise introduced destroys the optimizer's ability to track trends, leading to divergence.
+
+### The Recommended Alternative: Quantization-Aware Training (QAT)
+Instead of trying to force your training loop into INT8, the industry standard is **Quantization-Aware Training (QAT)**. This allows you to simulate INT8 constraints *during* your existing PyTorch training, which prepares the model for high-accuracy conversion.
+
+1. **Simulate INT8:** Use PyTorch's `torch.ao.quantization` or a library like `aimet` to insert "fake quantization" nodes into your graph during training. These nodes mimic the rounding and clamping behavior of INT8 without actually converting the weights to integers.
+2. **Train normally:** Because you are training in FP32 but simulating the errors of INT8, the model learns to compensate for the quantization noise.
+3. **Export & Convert:** Once converged, you perform "Post-Training Quantization" (PTQ) to export the final `.tflite` model. Because the model is now "QAT-hardened," the accuracy drop is typically negligible compared to a naive conversion.
+
+### Practical Steps for Your Project
+If you want to move forward with embedding your RL policy, follow this roadmap:
+* **Don't fork the framework:** Keep the training in `mjlab` as it is (FP32).
+* **Implement QAT in your PyTorch policy:** Modify your model definition to use `QuantStub` and `DeQuantStub` wrappers.
+* **Calibrate:** Use a "representative dataset" (a few thousand frames collected from your `mjlab` environment) to calibrate the final INT8 scales.
+* **Verify on Host:** Create a simple test script that runs the `PyTorch` model alongside the exported `TFLite` model and compares their output distributions. If they diverge significantly, you need more QAT epochs.
+
 ## Bill of Materials (BOM)
 
 | Component | Description | Link |
